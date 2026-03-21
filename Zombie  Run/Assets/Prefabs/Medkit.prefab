@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8667898157941746799}
   - component: {fileID: 1292981221023649972}
   - component: {fileID: 6593907775335780262}
+  - component: {fileID: 4879118257851509548}
   m_Layer: 0
   m_Name: Medkit
   m_TagString: Untagged
@@ -129,6 +130,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Medkit
   healAmount: 25
+--- !u!114 &4879118257851509548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4213135123979416798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a410b213209442fb15a69799f0240a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UIElements.PanelEventHandler
 --- !u!1 &4629888828402083112
 GameObject:
   m_ObjectHideFlags: 0
