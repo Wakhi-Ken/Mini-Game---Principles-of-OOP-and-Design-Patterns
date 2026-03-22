@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class MedkitSpawner : MonoBehaviour
 {
+    // Reference to the medkit prefab to spawn
     public GameObject medkitPrefab;
     public Vector3 spawnArea = new Vector3(8, 0, 8);
-
+    // Timer variables
     private float spawnTimer = 0f;
-    private float spawnInterval = 10f; // start at 10 seconds
-    public float minInterval = 3f;     // min interval as game progresses
+    private float spawnInterval = 10f; 
+    public float minInterval = 3f;   
 
     void Update()
     {
@@ -26,12 +27,13 @@ public class MedkitSpawner : MonoBehaviour
 
     void SpawnMedkit()
     {
+        // Check if the prefab is assigned
         if (medkitPrefab == null)
         {
             Debug.LogError("Assign Medkit prefab in Inspector!");
             return;
         }
-
+        // Generate a random spawn position within the defined area
         Vector3 pos = new Vector3(
             Random.Range(-spawnArea.x, spawnArea.x),
             0.5f,

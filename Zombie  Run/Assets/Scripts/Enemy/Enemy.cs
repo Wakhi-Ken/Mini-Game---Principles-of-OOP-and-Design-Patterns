@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour
 {
     public float speed = 2f;
     protected Transform player;
@@ -8,12 +8,14 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
+        // Find the player in the scene by tag
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody>();
     }
 
-    protected virtual void FixedUpdate() // use FixedUpdate for physics
+    protected virtual void FixedUpdate()
     {
+        // Move towards the player
         if (player != null)
         {
             Vector3 direction = (player.position - transform.position).normalized;
@@ -24,15 +26,17 @@ public class Enemy : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        // Check if the enemy collided with the player
         if (collision.collider.CompareTag("Player"))
         {
-            PlayerController playerCtrl = collision.collider.GetComponent<PlayerController>();
-            if (playerCtrl != null)
+            IDamageable damageable = collision.collider.GetComponent<IDamageable>();
+
+            if (damageable != null)
             {
-                playerCtrl.TakeDamage(10f);
+                damageable.TakeDamage(10f);
             }
 
-            Destroy(gameObject); // destroy only this enemy
+            Destroy(gameObject);
         }
     }
 }

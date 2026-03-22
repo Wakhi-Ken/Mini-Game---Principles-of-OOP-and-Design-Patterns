@@ -2,23 +2,22 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject fastZombiePrefab;
-    public GameObject tankZombiePrefab;
+    // Reference to the EnemyFactory to create enemies
+    public EnemyFactory factory;
 
     public Vector3 spawnArea = new Vector3(8, 0, 8);
 
     private float spawnTimer = 0f;
-    private float spawnInterval = 3f; // initial interval
-    public float minInterval = 1f; // minimum interval as difficulty increases
+    private float spawnInterval = 3f;
+    public float minInterval = 1f;
 
     void Update()
     {
+        // Increment the spawn timer
         spawnTimer += Time.deltaTime;
-
-        // Adjust spawn interval based on elapsed time
+        // Decrease spawn interval over time to increase difficulty
         float timeElapsed = Time.timeSinceLevelLoad;
         spawnInterval = Mathf.Max(minInterval, 3f - timeElapsed / 60f);
-        // Every 60s, interval decreases slowly toward minInterval
 
         if (spawnTimer >= spawnInterval)
         {
@@ -29,11 +28,14 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (fastZombiePrefab == null || tankZombiePrefab == null)
+        if (factory == null)
         {
-            Debug.LogError("Assign enemy prefabs in Inspector!");
+
+            Debug.LogError("Assign EnemyFactory in Inspector!");
             return;
         }
+
+        // Generate a random spawn position within the defined area
 
         Vector3 spawnPos = new Vector3(
             Random.Range(-spawnArea.x, spawnArea.x),
@@ -41,8 +43,7 @@ public class EnemySpawner : MonoBehaviour
             Random.Range(-spawnArea.z, spawnArea.z)
         );
 
-        GameObject prefabToSpawn = Random.Range(0, 2) == 0 ? fastZombiePrefab : tankZombiePrefab;
-
-        Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+        GameObject enemyPrefab = factory.CreateEnemy();
+        Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
     }
 }

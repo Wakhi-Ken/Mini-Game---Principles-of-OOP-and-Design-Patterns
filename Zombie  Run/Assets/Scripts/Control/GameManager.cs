@@ -2,9 +2,12 @@
 using TMPro;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour
 {
+    // Singleton instance
     public static GameManager instance;
+    // UI References
     public GameObject hudPanel;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI medkitText;
@@ -20,17 +23,24 @@ public class GameManager : MonoBehaviour
         if (instance == null) instance = this;
     }
 
+    
     void Start()
     {
+        // Find the player in the scene
         player = FindObjectOfType<PlayerController>();
+
+        PlayerController.OnHealthChanged += UpdateHealthUI;
+
         gameOverPanel.SetActive(false);
     }
 
+
+
     void Update()
     {
+        // Update medkit count and timer
         if (player != null)
         {
-            healthText.text = $"Health: {Mathf.Round(player.GetHealth())}";
             medkitText.text = $"Medkits: {player.medkitsCollected}";
 
             float time = Time.timeSinceLevelLoad;
@@ -38,8 +48,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void UpdateHealthUI(float health)
+    {
+        // Update health text with rounded value
+        healthText.text = $"Health: {Mathf.Round(health)}";
+    }
+
     string FormatTime(float time)
     {
+        // Format time as MM:SS
         int minutes = Mathf.FloorToInt(time / 60);
         int seconds = Mathf.FloorToInt(time % 60);
         return $"{minutes:00}:{seconds:00}";
@@ -47,8 +64,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(int medkits, float timeSurvived)
     {
-        hudPanel.SetActive(false); // 🔥 Hide all HUD
-
+        // Show game over screen with final stats
+        hudPanel.SetActive(false);
         gameOverPanel.SetActive(true);
 
         string formattedTime = FormatTime(timeSurvived);
@@ -66,22 +83,22 @@ public class GameManager : MonoBehaviour
 
     public void Replay()
     {
+        // Restart the current scene
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // 🏠 Go to Main Menu
     public void LoadMainMenu()
     {
+        // Load the main menu scene
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Main Menu"); // Make sure scene name matches exactly
+        SceneManager.LoadScene("Main Menu");
     }
 
-    // ❌ Quit Game
     public void QuitGame()
     {
-        Debug.Log("Game Quit"); // Helps in editor
-
+        
+        Debug.Log("Game Quit");
         Application.Quit();
     }
 }
